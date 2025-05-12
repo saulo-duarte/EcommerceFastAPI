@@ -1,0 +1,37 @@
+[project]
+name = "ecommerceapi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.15.2",
+    "fastapi>=0.115.12",
+    "loguru>=0.7.3",
+    "passlib>=1.7.4",
+    "psycopg2-binary>=2.9.10",
+    "pydantic>=2.11.4",
+    "sqlalchemy>=2.0.40",
+    "uvicorn[standard]>=0.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "httpx>=0.28.1",
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+    "ruff>=0.11.9",
+]
+
+[tool.black]
+line-length = 88
+skip-string-normalization = true
+
+[tool.ruff]
+select = ["E", "F", "W", "C", "B", "T"]
+ignore = []
+fix = true
+
+indent-size = 4
+max-line-length = 88
