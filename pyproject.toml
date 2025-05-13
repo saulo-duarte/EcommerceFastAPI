@@ -21,7 +21,9 @@ dev = [
     "httpx>=0.28.1",
     "pre-commit>=4.2.0",
     "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
     "ruff>=0.11.9",
+    "taskipy>=1.14.1",
 ]
 
 [tool.black]
@@ -29,9 +31,16 @@ line-length = 88
 skip-string-normalization = true
 
 [tool.ruff]
-select = ["E", "F", "W", "C", "B", "T"]
+select = ["I", "F", "E", "W", "PL", "PT"]
 ignore = []
 fix = true
 
 indent-size = 4
 max-line-length = 88
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "-p no:warnings"
+
+[tool.taskipy.tasks]
+test = 'pytest --cov=ecommerceapi -vv'
