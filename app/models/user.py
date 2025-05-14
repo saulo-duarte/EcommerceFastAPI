@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import uuid
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, Column, DateTime, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, relationship
 
 from app.db import mapper_registry
 
+if TYPE_CHECKING:
+    from app.models.address import Address
 
 @mapper_registry.mapped
 class User:
@@ -26,3 +31,5 @@ class User:
     updated_at: Mapped[datetime] = Column(
         DateTime(timezone=True), default=datetime.now(timezone.utc)
     )
+
+    addresses: Mapped["Address"] = relationship("Address", back_populates="user")
