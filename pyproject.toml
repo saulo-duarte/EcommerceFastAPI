@@ -33,12 +33,11 @@ line-length = 88
 skip-string-normalization = true
 
 [tool.ruff]
-select = ["I", "F", "E", "W", "PL", "PT"]
-ignore = []
 fix = true
 
-indent-size = 4
-max-line-length = 88
+[tool.ruff.lint]
+select = ["I", "F", "E", "W", "PL", "PT"]
+ignore = []
 
 [tool.pytest.ini_options]
 pythonpath = "."
