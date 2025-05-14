@@ -1,6 +1,10 @@
-import pytest
-from app.models import User
 from datetime import datetime, timezone
+
+import pytest
+from sqlalchemy.exc import IntegrityError
+
+from app.models import User
+
 
 def test_user_creation(session):
     user = User(
@@ -10,7 +14,7 @@ def test_user_creation(session):
         is_active=True,
         is_superuser=False,
         created_at=datetime.now(timezone.utc),
-        updated_at=datetime.now(timezone.utc)
+        updated_at=datetime.now(timezone.utc),
     )
 
     session.add(user)
@@ -30,19 +34,15 @@ def test_user_creation(session):
 
 def test_user_email_uniqueness(session):
     user1 = User(
-        email="duplicate@example.com",
-        hashed_password="password1",
-        full_name="User One"
+        email="duplicate@example.com", hashed_password="password1", full_name="User One"
     )
     user2 = User(
-        email="duplicate@example.com",
-        hashed_password="password2",
-        full_name="User Two"
+        email="duplicate@example.com", hashed_password="password2", full_name="User Two"
     )
 
     session.add(user1)
     session.commit()
 
-    with pytest.raises(Exception):
-        session.add(user2)
+    session.add(user2)
+    with pytest.raises(IntegrityError):
         session.commit()
