@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import uuid
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, relationship
 
 from app.db import mapper_registry
-from app.models import User
+
+if TYPE_CHECKING:
+    from app.models.user import User
 
 
 @mapper_registry.mapped
