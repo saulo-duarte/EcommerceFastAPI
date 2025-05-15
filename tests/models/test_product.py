@@ -6,12 +6,13 @@ from app.models import Category, Product
 TEST_PRODUCT_PRICE = 2499.90
 TEST_PRODUCT_STOCK = 10
 
+
 def test_product_creation(session):
     category = Category(
         id=uuid.uuid4(),
         name="Smartphones",
         description="Categoria para celulares",
-        created_at=datetime.now(timezone.utc)
+        created_at=datetime.now(timezone.utc),
     )
     session.add(category)
     session.commit()

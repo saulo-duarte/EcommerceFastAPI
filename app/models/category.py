@@ -13,6 +13,7 @@ from app.db import mapper_registry
 if TYPE_CHECKING:
     from app.models.product import Product
 
+
 @mapper_registry.mapped
 class Category:
     __tablename__ = "categories"

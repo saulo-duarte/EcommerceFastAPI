@@ -13,6 +13,7 @@ from app.db import mapper_registry
 if TYPE_CHECKING:
     from app.models.address import Address
 
+
 @mapper_registry.mapped
 class User:
     __tablename__ = "users"
