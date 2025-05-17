@@ -1,17 +1,18 @@
 from __future__ import annotations
 
+import re
 import uuid
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, validates
 
 from app.db import mapper_registry
 
 if TYPE_CHECKING:
-    from app.models.user import User
+    from app.models import Shipment, User
 
 
 @mapper_registry.mapped
@@ -39,3 +40,25 @@ class Address:
     )
 
     user: Mapped["User"] = relationship("User", back_populates="addresses")
+    shipping_shipments: Mapped[list["Shipment"]] = relationship(
+        "Shipment",
+        back_populates="shipping_address",
+        foreign_keys="[Shipment.shipping_address_id]",
+    )
+    billing_shipments: Mapped[list["Shipment"]] = relationship(
+        "Shipment",
+        back_populates="billing_address",
+        foreign_keys="[Shipment.billing_address_id]",
+    )
+
+    @validates("street", "city", "state", "country", "postal_code")
+    def validate_not_empty(self, key, value):
+        if not value or (isinstance(value, str) and value.strip() == ""):
+            raise ValueError(f"{key} is required and cannot be empty")
+        if key == "postal_code":
+            pattern = r"^\d{5}-?\d{3}$"
+            if not re.match(pattern, value):
+                raise ValueError(
+                    "Invalid postal code format. Expected '12345-678' or '12345678'"
+                )
+        return value
