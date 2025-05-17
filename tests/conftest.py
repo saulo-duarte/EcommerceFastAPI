@@ -1,6 +1,7 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import text
 
 from app.db import mapper_registry
 
@@ -20,3 +21,9 @@ def session(engine):
     yield session
     session.rollback()
     session.close()
+
+
+@pytest.fixture(autouse=True)
+def _clean_tables(session):
+    session.execute(text("TRUNCATE TABLE users CASCADE;"))
+    session.commit()
