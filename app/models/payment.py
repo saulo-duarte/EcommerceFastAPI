@@ -52,13 +52,17 @@ class Payment:
     )
 
     status: Mapped[PaymentStatus] = mapped_column(
-        Enum(PaymentStatus), name="payment_status", native_enum=False,
-        default=PaymentStatus.PENDING, nullable=False
+        Enum(PaymentStatus, native_enum=False),
+        name="payment_status",
+        default=PaymentStatus.PENDING,
+        nullable=False
     )
 
     method: Mapped[PaymentMethod] = mapped_column(
-        Enum(PaymentMethod), name="payment_method", native_enum=False,
-        default=PaymentMethod.CREDIT_CARD, nullable=False
+        Enum(PaymentMethod, native_enum=False),
+        name="payment_method",
+        default=PaymentMethod.CREDIT_CARD,
+        nullable=False
     )
 
     created_at: Mapped[datetime] = mapped_column(

@@ -34,12 +34,12 @@ class Order:
         UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
     )
     status: Mapped[OrderStatus] = mapped_column(
-        Enum(OrderStatus),
+        Enum(OrderStatus, native_enum=False),
         name="order_status",
-        native_enum=False,
         default=OrderStatus.PENDING,
         nullable=False,
     )
+
     total_price: Mapped[Numeric] = mapped_column(Numeric(10, 2), nullable=False)
 
     shipping_address_id: Mapped[uuid.UUID] = mapped_column(

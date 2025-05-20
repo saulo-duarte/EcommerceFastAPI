@@ -31,9 +31,8 @@ class Shipment:
    )
    tracking_number: Mapped[str] = mapped_column(String(50), nullable=False)
    status: Mapped[ShipmentStatus] = mapped_column(
-      Enum(ShipmentStatus),
+   Enum(ShipmentStatus, native_enum=False),
       name="shipment_status",
-      native_enum=False,
       default=ShipmentStatus.PENDING,
       nullable=False,
    )
