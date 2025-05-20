@@ -1,15 +1,14 @@
-from logging.config import fileConfig
 import os
-
-from sqlalchemy import engine_from_config, pool
-from alembic import context
+from logging.config import fileConfig
 
 from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
+
+from alembic import context
+from app.db import mapper_registry
+from app.models import *
+
 load_dotenv()
-
-from app.db.registry import mapper_registry
-from app import models
-
 config = context.config
 
 config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
