@@ -1,6 +1,6 @@
 import uuid
-from decimal import Decimal
 from datetime import datetime, timezone
+from decimal import Decimal
 
 import factory
 from factory.alchemy import SQLAlchemyModelFactory
@@ -36,6 +36,7 @@ def set_factories_session(session):
     OrderItemFactory._meta.sqlalchemy_session = session
     PaymentFactory._meta.sqlalchemy_session = session
     ShipmentFactory._meta.sqlalchemy_session = session
+
 
 class UserFactory(SQLAlchemyModelFactory):
     class Meta:
@@ -111,7 +112,12 @@ class ReviewFactory(SQLAlchemyModelFactory):
     user = factory.SubFactory(UserFactory)
     product = factory.SubFactory(ProductFactory)
     rating = factory.Faker(
-        "pyfloat", left_digits=1, right_digits=1, positive=True, min_value=1.0, max_value=5.0
+        "pyfloat",
+        left_digits=1,
+        right_digits=1,
+        positive=True,
+        min_value=1.0,
+        max_value=5.0,
     )
     comment = factory.Faker("paragraph", nb_sentences=2)
     created_at = factory.LazyFunction(lambda: datetime.now(timezone.utc))

@@ -1,0 +1,63 @@
+import uuid
+import pytest
+from decimal import Decimal
+from datetime import datetime, timezone
+from app.models.payment import Payment, PaymentStatus, PaymentMethod
+from tests.models_factory import PaymentFactory, set_factories_session
+
+
+def test_payment_creation(session):
+    set_factories_session(session)
+
+    payment = PaymentFactory()
+    session.add(payment)
+    session.commit()
+
+    assert payment.id is not None
+    assert payment.amount == Decimal("100.00")
+    assert payment.currency == "brl"
+    assert payment.status == PaymentStatus.PENDING
+    assert payment.method == PaymentMethod.CREDIT_CARD
+    assert isinstance(payment.created_at, datetime)
+    assert isinstance(payment.updated_at, datetime)
+    assert payment.amount_in_cents == 10000
+
+
+@pytest.mark.parametrize("invalid_amount", [Decimal("0"), Decimal("-10")])
+def test_payment_invalid_amount_raises(invalid_amount):
+    with pytest.raises(ValueError, match="amount must be positive"):
+        Payment(
+            order_id=uuid.uuid4(),
+            amount=invalid_amount,
+            currency="brl",
+            status=PaymentStatus.PENDING,
+            method=PaymentMethod.CREDIT_CARD,
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
+        )
+
+
+@pytest.mark.parametrize("invalid_status", ["invalid", None])
+def test_payment_invalid_status_raises(invalid_status):
+    with pytest.raises(ValueError):
+        Payment(
+            order_id=uuid.uuid4(),
+            amount=Decimal("50.00"),
+            status=invalid_status,
+            method=PaymentMethod.CREDIT_CARD,
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
+        )
+
+
+@pytest.mark.parametrize("invalid_method", ["invalid", None])
+def test_payment_invalid_method_raises(invalid_method):
+    with pytest.raises(ValueError):
+        Payment(
+            order_id=uuid.uuid4(),
+            amount=Decimal("50.00"),
+            status=PaymentStatus.PENDING,
+            method=invalid_method,
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
+        )
