@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.15.2",
+    "factory-boy>=3.3.3",
     "fastapi>=0.115.12",
     "loguru>=0.7.3",
     "passlib>=1.7.4",
