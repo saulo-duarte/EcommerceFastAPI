@@ -1,21 +1,21 @@
 import uuid
-
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, String, Float, DateTime, Text
+from sqlalchemy import DateTime, Float, ForeignKey, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from app.db import mapper_registry
 
 if TYPE_CHECKING:
-    from app.models import User, Product
+    from app.models import Product, User
 
 
 MIN_RATING = 1.0
 MAX_RATING = 5.0
 MAX_COMMENT_LENGTH = 1000
+
 
 @mapper_registry.mapped
 class Review:
@@ -44,7 +44,6 @@ class Review:
 
     product: Mapped["Product"] = relationship(back_populates="reviews")
     user: Mapped["User"] = relationship(back_populates="reviews")
-
 
     @validates("rating")
     def validate_rating(self, key, rating: float) -> float:

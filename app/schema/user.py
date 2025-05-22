@@ -1,42 +1,67 @@
 import uuid
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
 from app.models.value_objects import Password
+from app.schema.address import AddressRead
 
 
 class UserBase(BaseModel):
-   id: uuid.UUID
-   email: EmailStr
-   hashed_password: str
-   full_name: str
-   is_active: bool
-   is_superuser: bool
-   created_at: datetime
-   updated_at: datetime
+    email: EmailStr
+    full_name: str = Field(..., min_length=2, max_length=50)
+    is_active: bool = True
+    is_superuser: bool = False
 
-   model_config = {
-      "from_attributes": True,
-   }
+    @field_validator("full_name")
+    @classmethod
+    def strip_whitespace(cls, v: str) -> str:
+        return v.strip()
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, name: str) -> str:
+        name = name.strip()
+        if not name.replace(" ", "").isalpha():
+            raise ValueError("Full name must contain only letters and spaces")
+        return name
 
 
 class UserCreate(BaseModel):
-   email: EmailStr
-   full_name: str = Field(..., min_length=2, max_length=50)
-   password: Password
+    email: EmailStr
+    full_name: str = Field(..., min_length=2, max_length=50)
+    password: Password
 
-   model_config = {
-      "from_attributes": True,
-   }
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, name: str) -> str:
+        name = name.strip()
+        if not name.replace(" ", "").isalpha():
+            raise ValueError("Full name must contain only letters and spaces")
+        return name
 
 
 class UserUpdate(BaseModel):
-   full_name: Optional[str] = Field(None, min_length=2, max_length=50)
-   password: Optional[Password] = None
-   is_active: Optional[bool] = None
-   is_superuser: Optional[bool] = None
+    full_name: Optional[str] = Field(None, min_length=2, max_length=50)
+    password: Optional[Password] = None
+    is_active: Optional[bool] = None
+    is_superuser: Optional[bool] = None
 
-   model_config = {
-      "from_attributes": True,
-   }
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, name: Optional[str]) -> Optional[str]:
+        if name:
+            name = name.strip()
+            if not name.replace(" ", "").isalpha():
+                raise ValueError("Full name must contain only letters and spaces")
+        return name
 
+
+class UserRead(UserBase):
+    id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+    addresses: list[AddressRead] = []
+
+    model_config = ConfigDict(strict=True, from_attributes=True)

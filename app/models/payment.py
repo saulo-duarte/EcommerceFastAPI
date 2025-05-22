@@ -1,13 +1,12 @@
 import uuid
 from datetime import datetime, timezone
 from decimal import Decimal
+from enum import Enum as PyEnum
 from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import ForeignKey, Numeric, Enum, DateTime, String
+from sqlalchemy import DateTime, Enum, ForeignKey, Numeric, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, relationship, mapped_column, validates
-
-from enum import Enum as PyEnum
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from app.db import mapper_registry
 
@@ -38,31 +37,27 @@ class Payment:
     order_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("orders.id"), nullable=False
     )
-    amount: Mapped[Decimal] = mapped_column(
-        Numeric(10, 2), nullable=False
-    )
+    amount: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
     currency: Mapped[str] = mapped_column(
         String(length=3), default="brl", nullable=False
     )
     stripe_payment_intent_id: Mapped[Optional[str]] = mapped_column(
         String, nullable=True, unique=True
     )
-    stripe_status: Mapped[Optional[str]] = mapped_column(
-        String, nullable=True
-    )
+    stripe_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     status: Mapped[PaymentStatus] = mapped_column(
         Enum(PaymentStatus, native_enum=False),
         name="payment_status",
         default=PaymentStatus.PENDING,
-        nullable=False
+        nullable=False,
     )
 
     method: Mapped[PaymentMethod] = mapped_column(
         Enum(PaymentMethod, native_enum=False),
         name="payment_method",
         default=PaymentMethod.CREDIT_CARD,
-        nullable=False
+        nullable=False,
     )
 
     created_at: Mapped[datetime] = mapped_column(
@@ -97,4 +92,3 @@ class Payment:
     @property
     def amount_in_cents(self) -> int:
         return int(self.amount * 100)
-

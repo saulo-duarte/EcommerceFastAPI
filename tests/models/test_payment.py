@@ -1,8 +1,10 @@
 import uuid
-import pytest
-from decimal import Decimal
 from datetime import datetime, timezone
-from app.models.payment import Payment, PaymentStatus, PaymentMethod
+from decimal import Decimal
+
+import pytest
+
+from app.models.payment import Payment, PaymentMethod, PaymentStatus
 from tests.models_factory import PaymentFactory, set_factories_session
 
 

@@ -1,23 +1,24 @@
 import uuid
-import pytest
 from datetime import datetime, timezone
+
+import pytest
 
 from app.models import Review
 from tests.models_factory import ReviewFactory, set_factories_session
 
 
 def test_review_creation(session):
-   set_factories_session(session)
+    set_factories_session(session)
 
-   review = ReviewFactory()
+    review = ReviewFactory()
 
-   session.add(review)
-   session.commit()
+    session.add(review)
+    session.commit()
 
-   assert review.id is not None
-   assert 1.0 <= review.rating <= 5.0
-   assert review.product is not None
-   assert review.user is not None
+    assert review.id is not None
+    assert 1.0 <= review.rating <= 5.0
+    assert review.product is not None
+    assert review.user is not None
 
 
 @pytest.mark.parametrize("invalid_rating", [0.5, 5.5, -1, 10])

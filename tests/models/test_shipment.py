@@ -1,6 +1,8 @@
-import pytest
 from datetime import datetime, timezone
-from app.models.shipment import Shipment, ShipmentStatus
+
+import pytest
+
+from app.models.shipment import ShipmentStatus
 from tests.models_factory import ShipmentFactory, set_factories_session
 
 

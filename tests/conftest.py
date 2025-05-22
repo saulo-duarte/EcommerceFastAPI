@@ -14,7 +14,7 @@ def engine():
     mapper_registry.metadata.drop_all(bind=engine)
 
 
-@pytest.fixture()
+@pytest.fixture
 def session(engine):
     Session = sessionmaker(bind=engine)
     session = Session()
