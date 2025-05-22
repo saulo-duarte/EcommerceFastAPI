@@ -1,11 +1,11 @@
 import uuid
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from app.models.value_objects import Password
-from app.schema.address import AddressRead
+from app.schema.address import AddressRead, AddressCreate
 
 
 class UserBase(BaseModel):
@@ -28,10 +28,9 @@ class UserBase(BaseModel):
         return name
 
 
-class UserCreate(BaseModel):
-    email: EmailStr
-    full_name: str = Field(..., min_length=2, max_length=50)
+class UserCreate(UserBase):
     password: Password
+    addresses: List[AddressCreate] = []
 
     @field_validator("full_name")
     @classmethod

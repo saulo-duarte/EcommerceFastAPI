@@ -14,7 +14,7 @@ def test_review_create_valid():
         "comment": "Ótimo produto!",
         "product_id": uuid.uuid4(),
         "user_id": uuid.uuid4(),
-    } 
+    }
     review = ReviewCreate(**data)
     assert review.rating == 4.5
     assert review.comment == "Ótimo produto!"
