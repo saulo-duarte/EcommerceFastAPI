@@ -11,7 +11,12 @@ from app.models import *
 load_dotenv()
 config = context.config
 
-config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
+database_url = os.getenv("DATABASE_URL_SYNC")
+
+if not database_url:
+    raise RuntimeError("DATABASE_URL não está definido no ambiente")
+
+config.set_main_option("sqlalchemy.url", database_url)
 
 # Logging
 if config.config_file_name is not None:
