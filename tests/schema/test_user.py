@@ -15,13 +15,16 @@ def test_user_create_valid():
         password=password
     )
     assert user.email == "user@example.com"
-    assert user.full_name == "John Doe"  # deve remover espaços
+    assert user.full_name == "John Doe"
     assert isinstance(user.password, Password)
 
 
 def test_user_create_invalid_full_name():
     password = Password(raw="Valid1@Password")
-    with pytest.raises(ValueError, match="Full name must contain only letters and spaces"):
+    with pytest.raises(
+        ValueError,
+        match="Full name must contain only letters and spaces"
+    ):
         UserCreate(
             email="user@example.com",
             full_name="John123",
@@ -39,7 +42,10 @@ def test_user_update_partial():
 
 
 def test_user_update_invalid_full_name():
-    with pytest.raises(ValueError, match="Full name must contain only letters and spaces"):
+    with pytest.raises(
+        ValueError,
+        match="Full name must contain only letters and spaces"
+    ):
         UserUpdate(full_name="Invalid123!")
 
 
