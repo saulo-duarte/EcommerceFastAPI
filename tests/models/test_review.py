@@ -6,6 +6,8 @@ import pytest
 from app.models import Review
 from tests.models_factory import ReviewFactory, set_factories_session
 
+MAX_RATING = 5.0
+MIN_RATING = 1.0
 
 def test_review_creation(session):
     set_factories_session(session)
@@ -16,7 +18,7 @@ def test_review_creation(session):
     session.commit()
 
     assert review.id is not None
-    assert 1.0 <= review.rating <= 5.0
+    assert MIN_RATING <= review.rating <= MAX_RATING
     assert review.product is not None
     assert review.user is not None
 

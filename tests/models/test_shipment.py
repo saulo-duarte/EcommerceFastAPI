@@ -48,12 +48,14 @@ def test_shipment_timestamps(session):
 def test_shipment_invalid_status_raises(session, invalid_status):
     set_factories_session(session)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Invalid shipment status: .*"):
         ShipmentFactory(status=invalid_status)
 
 
 def test_shipment_tracking_number_required(session):
     set_factories_session(session)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError, match="Tracking number is required"):
         ShipmentFactory(tracking_number=None)
+
+
