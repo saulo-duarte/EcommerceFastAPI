@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.schema.category import CategoryRead
 
+MIN_DESCRIPTION_LENGTH = 2
 
 class ProductBase(BaseModel):
     name: str = Field(..., min_length=2, max_length=255)
@@ -22,8 +23,11 @@ class ProductBase(BaseModel):
     @field_validator("description")
     @classmethod
     def validate_description(cls, value: Optional[str]) -> Optional[str]:
-        if value and len(value.strip()) < 2:
-            raise ValueError("Description must be at least 2 characters")
+        if value and len(value.strip()) < MIN_DESCRIPTION_LENGTH:
+            raise ValueError(
+                f"Description must be at least {MIN_DESCRIPTION_LENGTH} "
+                "characters"
+            )
         return value.strip() if value else value
 
 
@@ -47,8 +51,11 @@ class ProductUpdate(BaseModel):
     @field_validator("description")
     @classmethod
     def validate_description(cls, value: Optional[str]) -> Optional[str]:
-        if value and len(value.strip()) < 2:
-            raise ValueError("Description must be at least 2 characters")
+        if value and len(value.strip()) < MIN_DESCRIPTION_LENGTH:
+            raise ValueError(
+                f"Description must be at least {MIN_DESCRIPTION_LENGTH} "
+                "characters"
+            )
         return value.strip() if value else value
 
 class ProductRead(ProductBase):

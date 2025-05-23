@@ -5,8 +5,11 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.models import PaymentMethod, PaymentStatus
+
+CURRENCY_CODE_LENGTH = 3
+
 if TYPE_CHECKING:
-    from app.models import PaymentMethod, PaymentStatus
     from app.schema.order import OrderRead
 
 
@@ -29,13 +32,14 @@ class PaymentBase(BaseModel):
     @field_validator("currency")
     @classmethod
     def validate_currency(cls, value: str) -> str:
-        if len(value) != 3:
-            raise ValueError("Currency must be a 3-letter code")
+        if len(value) != CURRENCY_CODE_LENGTH:
+            raise ValueError(f"Currency must be a {CURRENCY_CODE_LENGTH}-letter code")
         return value.lower()
 
 
 class PaymentCreate(PaymentBase):
     pass
+
 
 class PaymentUpdate(BaseModel):
     amount: Optional[Decimal] = Field(None, gt=0)
@@ -55,9 +59,10 @@ class PaymentUpdate(BaseModel):
     @field_validator("currency")
     @classmethod
     def validate_currency(cls, value: Optional[str]) -> Optional[str]:
-        if value and len(value) != 3:
-            raise ValueError("Currency must be a 3-letter code")
+        if value and len(value) != CURRENCY_CODE_LENGTH:
+            raise ValueError(f"Currency must be a {CURRENCY_CODE_LENGTH}-letter code")
         return value.lower() if value else value
+
 
 class PaymentRead(BaseModel):
     id: UUID
@@ -71,6 +76,6 @@ class PaymentRead(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    order: Optional[OrderRead] = None
+    order: Optional["OrderRead"] = None
 
     model_config = ConfigDict(from_attributes=True, strict=True)

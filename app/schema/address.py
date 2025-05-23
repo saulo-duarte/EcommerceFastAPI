@@ -19,7 +19,10 @@ class AddressBase(BaseModel):
     def validate_postal_code(cls, v: str) -> str:
         v = v.strip()
         if not v.replace("-", "").isalnum():
-            raise ValueError("Postal code must contain only letters, numbers, or dashes.")
+            raise ValueError(
+                "Postal code must contain only letters, "
+                "numbers, or dashes."
+            )
         return v.upper()
 
 class AddressCreate(AddressBase):
@@ -40,7 +43,10 @@ class AddressUpdate(BaseModel):
         if v:
             v = v.strip()
             if not v.replace("-", "").isalnum():
-                raise ValueError("Postal code must contain only letters, numbers, or dashes.")
+                raise ValueError(
+                    "Postal code must contain only letters, "
+                    "numbers, or dashes."
+                )
             return v.upper()
         return v
 

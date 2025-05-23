@@ -1,10 +1,10 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.repository.user import UserRepository
-from app.repository.address import AddressRepository
-from app.schema.user import UserCreate
 from app.models import User
+from app.repository.address import AddressRepository
+from app.repository.user import UserRepository
+from app.schema.user import UserCreate
 
 
 class UserService:

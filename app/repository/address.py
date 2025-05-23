@@ -1,9 +1,9 @@
 from typing import Optional
 from uuid import UUID
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.exc import IntegrityError
 
 from app.models import Address
 from app.schema.address import AddressCreate, AddressUpdate
@@ -13,7 +13,9 @@ class AddressRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def create_address(self, address_data: AddressCreate, user_id: UUID) -> Address:
+    async def create_address(
+        self, address_data: AddressCreate, user_id: UUID
+    ) -> Address:
         db_address = Address(
             street=address_data.street,
             city=address_data.city,
@@ -48,7 +50,9 @@ class AddressRepository:
         await self.db.delete(address)
         await self.db.commit()
 
-    async def list(self, user_id: UUID, skip: int = 0, limit: int = 100) -> list[Address]:
+    async def list(
+        self, user_id: UUID, skip: int = 0, limit: int = 100
+    ) -> list[Address]:
         result = await self.db.execute(
             select(Address)
             .filter(Address.user_id == user_id)

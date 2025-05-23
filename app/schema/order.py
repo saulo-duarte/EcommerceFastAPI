@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -9,9 +9,10 @@ from app.models import OrderStatus
 from app.schema.address import AddressRead
 from app.schema.order_item import OrderItemRead
 from app.schema.payment import PaymentRead
-from app.schema.shipment import ShipmentRead
 from app.schema.user import UserRead
 
+if TYPE_CHECKING:
+    from app.schema.shipment import ShipmentRead
 
 class OrderBase(BaseModel):
     user_id: UUID
@@ -40,7 +41,7 @@ class OrderRead(BaseModel):
 
     items: List[OrderItemRead] = []
     payments: List[PaymentRead] = []
-    shipments: List[ShipmentRead] = []
+    shipments: list["ShipmentRead"] = []
 
     created_at: datetime
     updated_at: datetime

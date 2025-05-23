@@ -1,11 +1,11 @@
 import uuid
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from app.models.value_objects import Password
-from app.schema.address import AddressRead, AddressCreate
+from app.schema.address import AddressCreate, AddressRead
 
 
 class UserBase(BaseModel):
