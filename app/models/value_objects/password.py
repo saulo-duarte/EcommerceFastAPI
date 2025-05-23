@@ -18,7 +18,8 @@ class Password(BaseModel):
     def validate(self) -> None:
         if not self.PASSWORD_REGEX.match(self.raw):
             raise ValueError(
-                "Password must be at least 8 characters and include uppercase, lowercase, digit, and special char."
+                "Password must be at least 8 characters and include "
+                "uppercase, lowercase, digit, and special char."
             )
 
     def hash(self) -> str:

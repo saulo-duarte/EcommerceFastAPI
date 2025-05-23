@@ -20,11 +20,7 @@ class CouponType(str, PyEnum):
     PERCENTAGE = "percentage"
     FIXED_AMOUNT = "fixed_amount"
 
-
-class CouponType(str, PyEnum):
-    PERCENTAGE = "percentage"
-    FIXED_AMOUNT = "fixed_amount"
-
+MAX_DISCOUNT_PERCENTAGE = 100
 
 @mapper_registry.mapped
 class Coupon:
@@ -78,8 +74,10 @@ class Coupon:
 
     @validates("discount_percent")
     def validate_discount_percent(self, key, value: Decimal | None) -> Decimal | None:
-        if value is not None and not (0 < value <= 100):
-            raise ValueError("discount_percent must be between 0 and 100")
+        if value is not None and not (0 < value <= MAX_DISCOUNT_PERCENTAGE):
+            raise ValueError(
+                f"discount_percent must be between 0 and {MAX_DISCOUNT_PERCENTAGE}"
+            )
         return value
 
     @validates("discount_fixed")
