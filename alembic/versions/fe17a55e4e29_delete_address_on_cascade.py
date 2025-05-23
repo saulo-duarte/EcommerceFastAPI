@@ -7,9 +7,9 @@ Create Date: 2025-05-22 19:46:56.172378
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = 'fe17a55e4e29'
@@ -91,19 +91,27 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('orders',
-    sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('user_id', sa.UUID(), nullable=False),
-    sa.Column('order_status', sa.Enum('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELED', name='orderstatus', native_enum=False), nullable=False),
-    sa.Column('total_price', sa.Numeric(precision=10, scale=2), nullable=False),
-    sa.Column('shipping_address_id', sa.UUID(), nullable=False),
-    sa.Column('billing_address_id', sa.UUID(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
-    sa.ForeignKeyConstraint(['billing_address_id'], ['addresses.id'], ),
-    sa.ForeignKeyConstraint(['shipping_address_id'], ['addresses.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    op.create_table(
+        'orders',
+        sa.Column('id', sa.UUID(), nullable=False),
+        sa.Column('user_id', sa.UUID(), nullable=False),
+        sa.Column(
+            'order_status',
+            sa.Enum(
+                'PENDING', 'SHIPPED', 'DELIVERED', 'CANCELED',
+                name='orderstatus', native_enum=False
+            ),
+            nullable=False
+        ),
+        sa.Column('total_price', sa.Numeric(precision=10, scale=2), nullable=False),
+        sa.Column('shipping_address_id', sa.UUID(), nullable=False),
+        sa.Column('billing_address_id', sa.UUID(), nullable=False),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
+        sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
+        sa.ForeignKeyConstraint(['billing_address_id'], ['addresses.id']),
+        sa.ForeignKeyConstraint(['shipping_address_id'], ['addresses.id']),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id']),
+        sa.PrimaryKeyConstraint('id')
     )
     op.create_table('reviews',
     sa.Column('id', sa.UUID(), nullable=False),
@@ -134,8 +142,22 @@ def upgrade() -> None:
     sa.Column('currency', sa.String(length=3), nullable=False),
     sa.Column('stripe_payment_intent_id', sa.String(), nullable=True),
     sa.Column('stripe_status', sa.String(), nullable=True),
-    sa.Column('payment_status', sa.Enum('PENDING', 'COMPLETED', 'FAILED', 'REFUNDED', name='paymentstatus', native_enum=False), nullable=False),
-    sa.Column('payment_method', sa.Enum('CREDIT_CARD', 'PAYPAL', 'BANK_TRANSFER', name='paymentmethod', native_enum=False), nullable=False),
+    sa.Column(
+        'payment_status',
+        sa.Enum(
+            'PENDING', 'COMPLETED', 'FAILED', 'REFUNDED',
+            name='paymentstatus', native_enum=False
+        ),
+        nullable=False
+    ),
+    sa.Column(
+        'payment_method',
+        sa.Enum(
+            'CREDIT_CARD', 'PAYPAL', 'BANK_TRANSFER',
+            name='paymentmethod', native_enum=False
+        ),
+        nullable=False
+    ),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
     sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
@@ -146,7 +168,14 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('order_id', sa.UUID(), nullable=False),
     sa.Column('tracking_number', sa.String(length=50), nullable=False),
-    sa.Column('shipment_status', sa.Enum('PENDING', 'SHIPPED', 'DELIVERED', 'RETURNED', name='shipmentstatus', native_enum=False), nullable=False),
+    sa.Column(
+        'shipment_status',
+        sa.Enum(
+            'PENDING', 'SHIPPED', 'DELIVERED', 'RETURNED',
+            name='shipmentstatus', native_enum=False
+        ),
+        nullable=False
+    ),
     sa.Column('shipping_address_id', sa.UUID(), nullable=False),
     sa.Column('billing_address_id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
