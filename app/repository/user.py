@@ -4,8 +4,10 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.models import User
+from app.models.value_objects import Password
 from app.schema.user import UserCreate, UserUpdate
 
 
@@ -31,8 +33,13 @@ class UserRepository:
         return db_user
 
     async def get_by_id(self, user_id: UUID) -> Optional[User]:
-        result = await self.db.get(User, user_id)
-        return result
+        stmt = (
+            select(User)
+            .options(selectinload(User.addresses))
+            .filter(User.id == user_id)
+        )
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
 
     async def get_by_email(self, email: str) -> Optional[User]:
         stmt = select(User).filter(User.email == email)
@@ -42,6 +49,10 @@ class UserRepository:
     async def update(self, user: User, updates: UserUpdate) -> User:
         for field, value in updates.model_dump(exclude_unset=True).items():
             if field == "password":
+                if isinstance(value, dict):
+                    value = Password(**value)
+                elif isinstance(value, str):
+                    value = Password(raw=value)
                 setattr(user, "hashed_password", value.hash())
             else:
                 setattr(user, field, value)
