@@ -1,8 +1,8 @@
-"""create app schema
+"""initialize schema
 
-Revision ID: f6bc197c84dc
-Revises: 069c13fff23a
-Create Date: 2025-05-22 19:18:26.863042
+Revision ID: 097e5e18f37d
+Revises: 
+Create Date: 2025-05-26 10:07:32.421497
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = 'f6bc197c84dc'
-down_revision: Union[str, None] = '069c13fff23a'
+revision: str = '097e5e18f37d'
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -66,6 +66,23 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('coupons',
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('code', sa.String(length=50), nullable=False),
+    sa.Column('coupon_type', sa.Enum('PERCENTAGE', 'FIXED_AMOUNT', name='coupontype', native_enum=False), nullable=False),
+    sa.Column('discount_percent', sa.Numeric(precision=5, scale=2), nullable=True),
+    sa.Column('discount_fixed', sa.Numeric(precision=10, scale=2), nullable=True),
+    sa.Column('min_order_value', sa.Numeric(precision=10, scale=2), nullable=False),
+    sa.Column('expires_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('usage_limit', sa.Integer(), nullable=True),
+    sa.Column('used_count', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('user_id', sa.UUID(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('code')
+    )
     op.create_table('products',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
@@ -94,15 +111,7 @@ def upgrade() -> None:
     op.create_table('orders',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('user_id', sa.UUID(), nullable=False),
-    sa.Column(
-        'order_status',
-        sa.Enum(
-            'PENDING', 'SHIPPED', 'DELIVERED', 'CANCELED',
-            name='orderstatus',
-            native_enum=False
-        ),
-        nullable=False
-    ),
+    sa.Column('order_status', sa.Enum('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELED', name='orderstatus', native_enum=False), nullable=False),
     sa.Column('total_price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('shipping_address_id', sa.UUID(), nullable=False),
     sa.Column('billing_address_id', sa.UUID(), nullable=False),
@@ -142,24 +151,8 @@ def upgrade() -> None:
     sa.Column('currency', sa.String(length=3), nullable=False),
     sa.Column('stripe_payment_intent_id', sa.String(), nullable=True),
     sa.Column('stripe_status', sa.String(), nullable=True),
-    sa.Column(
-        'payment_status',
-        sa.Enum(
-            'PENDING', 'COMPLETED', 'FAILED', 'REFUNDED',
-            name='paymentstatus',
-            native_enum=False
-        ),
-        nullable=False
-    ),
-    sa.Column(
-        'payment_method',
-        sa.Enum(
-            'CREDIT_CARD', 'PAYPAL', 'BANK_TRANSFER',
-            name='paymentmethod',
-            native_enum=False
-        ),
-        nullable=False
-    ),
+    sa.Column('payment_status', sa.Enum('PENDING', 'COMPLETED', 'FAILED', 'REFUNDED', name='paymentstatus', native_enum=False), nullable=False),
+    sa.Column('payment_method', sa.Enum('CREDIT_CARD', 'PAYPAL', 'BANK_TRANSFER', name='paymentmethod', native_enum=False), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
     sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
@@ -170,15 +163,7 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('order_id', sa.UUID(), nullable=False),
     sa.Column('tracking_number', sa.String(length=50), nullable=False),
-    sa.Column(
-        'shipment_status',
-        sa.Enum(
-            'PENDING', 'SHIPPED', 'DELIVERED', 'RETURNED',
-            name='shipmentstatus',
-            native_enum=False
-        ),
-        nullable=False
-    ),
+    sa.Column('shipment_status', sa.Enum('PENDING', 'SHIPPED', 'DELIVERED', 'RETURNED', name='shipmentstatus', native_enum=False), nullable=False),
     sa.Column('shipping_address_id', sa.UUID(), nullable=False),
     sa.Column('billing_address_id', sa.UUID(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
@@ -201,6 +186,7 @@ def downgrade() -> None:
     op.drop_table('orders')
     op.drop_table('cart_items')
     op.drop_table('products')
+    op.drop_table('coupons')
     op.drop_table('carts')
     op.drop_table('addresses')
     op.drop_index(op.f('ix_users_email'), table_name='users')

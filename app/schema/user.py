@@ -1,3 +1,4 @@
+import re
 import uuid
 from datetime import datetime
 from typing import List, Optional
@@ -23,7 +24,7 @@ class UserBase(BaseModel):
     @classmethod
     def validate_full_name(cls, name: str) -> str:
         name = name.strip()
-        if not name.replace(" ", "").isalpha():
+        if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", name):
             raise ValueError("Full name must contain only letters and spaces")
         return name
 
