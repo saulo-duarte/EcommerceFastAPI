@@ -11,6 +11,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from app.db import mapper_registry
+from app.models.order_coupons import order_coupons
 
 if TYPE_CHECKING:
     from app.models import Order, User
@@ -33,7 +34,7 @@ class Coupon:
     code: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
     type: Mapped[CouponType] = mapped_column(
-        Enum(CouponType), name="coupon_type", native_enum=False, nullable=False
+        Enum(CouponType, native_enum=False), name="coupon_type", nullable=False
     )
 
     discount_percent: Mapped[Decimal | None] = mapped_column(
@@ -69,7 +70,7 @@ class Coupon:
     )
     user: Mapped["User"] = relationship(back_populates="coupons")
     orders: Mapped[list["Order"]] = relationship(
-        back_populates="coupon", secondary="order_coupons"
+        back_populates="coupons", secondary=order_coupons
     )
 
     @validates("discount_percent")

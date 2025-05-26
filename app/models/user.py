@@ -12,7 +12,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from app.db import mapper_registry
 
 if TYPE_CHECKING:
-    from app.models import Address, Cart, Order, Review
+    from app.models import Address, Cart, Coupon, Order, Review
 
 PASSWORD_REGEX = re.compile(
     r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$"
@@ -41,13 +41,20 @@ class User:
         DateTime(timezone=True), default=datetime.now(timezone.utc)
     )
 
-    addresses: Mapped["Address"] = relationship("Address", back_populates="user")
+    addresses: Mapped[list[Address]] = relationship(
+        "Address",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
     carts: Mapped["Cart"] = relationship("Cart", back_populates="user")
     orders: Mapped[list[Order]] = relationship(
         "Order", back_populates="user", cascade="all, delete-orphan"
     )
     reviews: Mapped[list["Review"]] = relationship(
         "Review", back_populates="user", cascade="all, delete-orphan"
+    )
+    coupons: Mapped[list["Coupon"]] = relationship(
+        "Coupon", back_populates="user", cascade="all, delete-orphan"
     )
 
     @validates("email")

@@ -11,9 +11,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from app.db import mapper_registry
+from app.models.order_coupons import order_coupons
 
 if TYPE_CHECKING:
-    from app.models import Address, OrderItem, Payment, Shipment, User
+    from app.models import Address, Coupon, OrderItem, Payment, Shipment, User
 
 
 class OrderStatus(str, PyEnum):
@@ -72,6 +73,9 @@ class Order:
     )
     shipments: Mapped[list["Shipment"]] = relationship(
         "Shipment", back_populates="order", cascade="all, delete-orphan"
+    )
+    coupons: Mapped[list["Coupon"]] = relationship(
+        "Coupon", secondary=order_coupons, back_populates="orders"
     )
 
     @validates("total_price")
