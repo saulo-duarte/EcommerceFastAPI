@@ -2,6 +2,7 @@ from .address import Address
 from .cart import Cart
 from .cart_item import CartItem
 from .category import Category
+from .coupon import Coupon
 from .order import Order, OrderStatus
 from .order_item import OrderItem
 from .payment import Payment, PaymentMethod, PaymentStatus
@@ -26,4 +27,5 @@ __all__ = [
     "Shipment",
     "ShipmentStatus",
     "Review",
+    "Coupon",
 ]

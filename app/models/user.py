@@ -58,10 +58,14 @@ class User:
 
     @validates("full_name")
     def validate_full_name(self, key: str, full_name: str) -> str:
-        if not re.match(r"^[a-zA-Z\s]+$", full_name):
+        full_name = full_name.strip()
+
+        if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿÇç\s]+", full_name):
             raise ValueError("Full name must contain only letters and spaces")
+
         if len(full_name) < MIN_NAME_LENGTH or len(full_name) > MAX_NAME_LENGTH:
             raise ValueError("Full name must be between 2 and 50 characters")
+
         return full_name
 
     @validates("hashed_password")
