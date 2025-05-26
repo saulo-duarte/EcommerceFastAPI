@@ -5,7 +5,7 @@ from app.db.session import get_async_db
 from app.schema.user import UserCreate, UserRead
 from app.services.user import UserService
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(prefix="/user", tags=["user"])
 
 @router.post("/", response_model=UserRead)
 async def create_user(
