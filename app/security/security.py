@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 
 from dotenv import load_dotenv
 from fastapi import HTTPException
@@ -27,7 +27,7 @@ def verify_access_token(token: str):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
         return user_id
-    
+
     except JWTError:
         raise HTTPException(
             status_code=401,

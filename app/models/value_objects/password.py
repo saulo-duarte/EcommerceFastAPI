@@ -1,6 +1,8 @@
-from pydantic import BaseModel, field_validator
 import re
+
 import bcrypt
+from pydantic import BaseModel, field_validator
+
 
 class Password(BaseModel):
     raw: str
