@@ -32,7 +32,7 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
-    category_id: uuid.UUID
+    category_name: str
 
 
 class ProductUpdate(BaseModel):
