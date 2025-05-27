@@ -1,33 +1,22 @@
+from pydantic import BaseModel, field_validator
 import re
-from typing import ClassVar
-
-from passlib.context import CryptContext
-from pydantic import BaseModel
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+import bcrypt
 
 class Password(BaseModel):
     raw: str
 
-    MIN_LENGTH: ClassVar[int] = 8
-    PASSWORD_REGEX: ClassVar[re.Pattern] = re.compile(
-        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$"
-    )
-
-    def validate(self) -> None:
-        if not self.PASSWORD_REGEX.match(self.raw):
-            raise ValueError(
-                "Password must be at least 8 characters and include "
-                "uppercase, lowercase, digit, and special char."
-            )
+    @field_validator("raw")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        pattern = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$")
+        if not pattern.match(v):
+            raise ValueError("Password must be at least 8 characters and include uppercase, lowercase, digit, and special char.")
+        return v
 
     def hash(self) -> str:
-        self.validate()
-        return pwd_context.hash(self.raw)
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(self.raw.encode(), salt)
+        return hashed.decode()
 
     def verify(self, hashed_password: str) -> bool:
-        return pwd_context.verify(self.raw, hashed_password)
-
-    class Config:
-        arbitrary_types_allowed = True
+        return bcrypt.checkpw(self.raw.encode(), hashed_password.encode())
