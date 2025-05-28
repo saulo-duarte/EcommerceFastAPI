@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routes.v1 import auth, category, user
+from app.routes.v1 import auth, category, product, user
 
 app = FastAPI()
 
@@ -12,3 +12,4 @@ async def root():
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(category.router)
+app.include_router(product.router)
