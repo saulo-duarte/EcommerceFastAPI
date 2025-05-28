@@ -20,3 +20,10 @@ async def create_review(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@router.get("/", response_model=list[ReviewRead])
+async def list_reviews(
+    db: AsyncSession = Depends(get_async_db),
+):
+    review_service = ReviewService(db)
+    reviews = await review_service.list_reviews()
+    return reviews
