@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 
 from app.routes.v1 import auth, category, product, review, user
+from app.configs.logging_middleware import LoggingMiddleware
 
 app = FastAPI()
 
+app.add_middleware(LoggingMiddleware)
+
+routers = [user.router, auth.router, category.router, product.router, review.router]
+
+for r in routers:
+    app.include_router(r)
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-
-app.include_router(user.router)
-app.include_router(auth.router)
-app.include_router(category.router)
-app.include_router(product.router)
-app.include_router(review.router)
