@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from app.routes.v1 import auth, category, product, review, user
 from app.configs.logging_middleware import LoggingMiddleware
+from app.routes.v1 import auth, category, product, review, user
 
 app = FastAPI()
 

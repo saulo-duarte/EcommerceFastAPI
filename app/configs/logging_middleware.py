@@ -1,7 +1,10 @@
+import time
+
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
-import time
+
 from app.configs.logger import logger
+
 
 class LoggingMiddleware(BaseHTTPMiddleware):
     async  def dispatch(self, request: Request, call_next):
