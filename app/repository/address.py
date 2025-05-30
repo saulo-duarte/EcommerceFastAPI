@@ -24,7 +24,7 @@ class AddressRepository:
             postal_code=address_data.postal_code,
             is_default_shipping=address_data.is_default_shipping,
             is_default_billing=address_data.is_default_billing,
-            user_id=user_id
+            user_id=user_id,
         )
         self.db.add(db_address)
         try:
@@ -54,9 +54,6 @@ class AddressRepository:
         self, user_id: UUID, skip: int = 0, limit: int = 100
     ) -> list[Address]:
         result = await self.db.execute(
-            select(Address)
-            .filter(Address.user_id == user_id)
-            .offset(skip)
-            .limit(limit)
+            select(Address).filter(Address.user_id == user_id).offset(skip).limit(limit)
         )
         return result.scalars().all()

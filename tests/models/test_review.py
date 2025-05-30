@@ -9,6 +9,7 @@ from tests.models_factory import ReviewFactory, set_factories_session
 MAX_RATING = 5.0
 MIN_RATING = 1.0
 
+
 def test_review_creation(session):
     set_factories_session(session)
 

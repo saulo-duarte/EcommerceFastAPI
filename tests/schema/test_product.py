@@ -15,7 +15,7 @@ def test_product_create_valid():
         "stock": 10,
         "price": 999.99,
         "category_id": uuid.uuid4(),
-        "is_active": True
+        "is_active": True,
     }
     product = ProductCreate(**data)
     assert product.name == "Smartphone"
@@ -26,12 +26,7 @@ def test_product_create_valid():
 
 
 def test_product_create_invalid_name_too_short():
-    data = {
-        "name": "A",
-        "stock": 5,
-        "price": 100,
-        "category_id": uuid.uuid4()
-    }
+    data = {"name": "A", "stock": 5, "price": 100, "category_id": uuid.uuid4()}
     with pytest.raises(ValueError):
         ProductCreate(**data)
 
@@ -42,7 +37,7 @@ def test_product_create_invalid_description_too_short():
         "description": "A",
         "stock": 5,
         "price": 100,
-        "category_id": uuid.uuid4()
+        "category_id": uuid.uuid4(),
     }
     with pytest.raises(ValueError, match="Description must be at least 2 characters"):
         ProductCreate(**data)
@@ -53,7 +48,7 @@ def test_product_create_negative_stock():
         "name": "Valid Name",
         "stock": -1,
         "price": 100,
-        "category_id": uuid.uuid4()
+        "category_id": uuid.uuid4(),
     }
     with pytest.raises(ValueError):
         ProductCreate(**data)
@@ -64,7 +59,7 @@ def test_product_create_negative_price():
         "name": "Valid Name",
         "stock": 10,
         "price": -10.5,
-        "category_id": uuid.uuid4()
+        "category_id": uuid.uuid4(),
     }
     with pytest.raises(ValueError):
         ProductCreate(**data)
@@ -76,7 +71,7 @@ def test_product_update_partial():
         "description": " New Description ",
         "stock": 20,
         "price": 150.0,
-        "is_active": False
+        "is_active": False,
     }
     update = ProductUpdate(**data)
     assert update.name == "New Name"
@@ -105,7 +100,7 @@ def test_product_read_model():
         name="Electronics",
         description="Devices",
         created_at=datetime.now(timezone.utc),
-        updated_at=datetime.now(timezone.utc)
+        updated_at=datetime.now(timezone.utc),
     )
     product = ProductRead(
         id=uuid.uuid4(),

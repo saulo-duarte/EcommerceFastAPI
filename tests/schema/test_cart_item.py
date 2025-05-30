@@ -15,12 +15,13 @@ from app.schema.product import ProductRead
 PRICE_SNAPSHOT = Decimal("19.99")
 ITEM_QUANTITY = 3
 
+
 def test_cart_item_create_valid():
     item = CartItemCreate(
         cart_id=uuid.uuid4(),
         product_id=uuid.uuid4(),
         quantity=ITEM_QUANTITY,
-        price_snapshot=PRICE_SNAPSHOT
+        price_snapshot=PRICE_SNAPSHOT,
     )
     assert item.quantity == ITEM_QUANTITY
     assert item.price_snapshot == PRICE_SNAPSHOT
@@ -32,8 +33,9 @@ def test_cart_item_create_invalid_quantity():
             cart_id=uuid.uuid4(),
             product_id=uuid.uuid4(),
             quantity=0,
-            price_snapshot=Decimal("10.00")
+            price_snapshot=Decimal("10.00"),
         )
+
 
 def test_cart_item_create_invalid_price():
     with pytest.raises(ValueError):
@@ -41,7 +43,7 @@ def test_cart_item_create_invalid_price():
             cart_id=uuid.uuid4(),
             product_id=uuid.uuid4(),
             quantity=1,
-            price_snapshot=Decimal("-1.00")
+            price_snapshot=Decimal("-1.00"),
         )
 
 

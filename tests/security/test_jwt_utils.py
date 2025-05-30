@@ -10,6 +10,7 @@ fake = Faker()
 
 TEST_SECRET = "testsecretkey123"
 
+
 @pytest.fixture(autouse=True)
 def setup_env(monkeypatch):
     monkeypatch.setenv("JWT_SECRET_KEY", TEST_SECRET)

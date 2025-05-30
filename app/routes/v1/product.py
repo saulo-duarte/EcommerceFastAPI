@@ -9,6 +9,7 @@ from app.services.product import ProductService
 
 router = APIRouter(prefix="/product", tags=["product"])
 
+
 @router.post("/", response_model=ProductRead)
 async def create_product(
     product_data: ProductCreate,
@@ -21,11 +22,13 @@ async def create_product(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/", response_model=list[ProductRead])
 async def list_products(db: AsyncSession = Depends(get_async_db)):
     product_service = ProductService(db)
     products = await product_service.list_products()
     return products
+
 
 @router.get("/{product_id}", response_model=ProductRead)
 async def get_product(
@@ -39,6 +42,7 @@ async def get_product(
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.put("/{product_id}", response_model=ProductRead)
 async def update_product(
     product_id: UUID,
@@ -51,6 +55,7 @@ async def update_product(
         return updated_product
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
 
 @router.delete("/{product_id}")
 async def delete_product(

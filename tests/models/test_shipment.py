@@ -57,5 +57,3 @@ def test_shipment_tracking_number_required(session):
 
     with pytest.raises(ValueError, match="Tracking number is required"):
         ShipmentFactory(tracking_number=None)
-
-

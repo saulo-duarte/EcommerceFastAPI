@@ -21,6 +21,7 @@ def test_address_create_valid():
     assert address.street == "Rua Exemplo"
     assert address.postal_code == "12345-678".upper()
 
+
 def test_address_create_invalid_postal_code():
     data = {
         "street": "Rua X",
@@ -33,14 +34,13 @@ def test_address_create_invalid_postal_code():
     with pytest.raises(ValueError, match="Postal code must contain only"):
         AddressCreate(**data)
 
+
 def test_address_update_partial():
-    update = AddressUpdate(
-        street="   Rua Nova   ",
-        postal_code=" 54321-000 "
-    )
+    update = AddressUpdate(street="   Rua Nova   ", postal_code=" 54321-000 ")
 
     assert update.street == "Rua Nova"
     assert update.postal_code == "54321-000"
+
 
 def test_address_read_model():
     address = AddressRead(
@@ -54,7 +54,7 @@ def test_address_read_model():
         is_default_shipping=False,
         is_default_billing=False,
         created_at=datetime.now(timezone.utc),
-        updated_at=datetime.now(timezone.utc)
+        updated_at=datetime.now(timezone.utc),
     )
 
     assert address.street == "Rua ABC"

@@ -12,10 +12,9 @@ from app.schema.product import ProductRead
 
 CART_ITEM_QUANTITY = 2
 
+
 def test_cart_create_valid():
-    cart = CartCreate(
-        user_id=uuid.uuid4()
-    )
+    cart = CartCreate(user_id=uuid.uuid4())
     assert cart.is_active is True
     assert cart.is_checked_out is False
     assert isinstance(cart.user_id, uuid.UUID)
@@ -60,7 +59,7 @@ def test_cart_read_with_items():
         id=uuid.uuid4(),
         name="Books",
         created_at=datetime.now(timezone.utc),
-        updated_at=datetime.now(timezone.utc)
+        updated_at=datetime.now(timezone.utc),
     )
 
     product = ProductRead(
@@ -71,7 +70,7 @@ def test_cart_read_with_items():
         category=category,
         is_available=True,
         created_at=datetime.now(timezone.utc),
-        updated_at=datetime.now(timezone.utc)
+        updated_at=datetime.now(timezone.utc),
     )
 
     item = CartItemRead(

@@ -12,12 +12,15 @@ class CartBase(BaseModel):
     is_active: bool = Field(default=True)
     is_checked_out: bool = Field(default=False)
 
+
 class CartCreate(CartBase):
     pass
+
 
 class CartUpdate(BaseModel):
     is_active: Optional[bool] = None
     is_checked_out: Optional[bool] = None
+
 
 class CartRead(CartBase):
     id: uuid.UUID

@@ -1,10 +1,10 @@
 from typing import List, Optional
 from uuid import UUID
 
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-from fastapi import HTTPException
 
 from app.models import Product, Review, User
 from app.repository.review import ReviewRepository
@@ -17,7 +17,9 @@ class ReviewService:
         self.review_repository = ReviewRepository(db)
 
     async def create_review(self, review_data: ReviewCreate) -> Review:
-        product = await self.db.execute(select(Product).where(Product.id == review_data.product_id))
+        product = await self.db.execute(
+            select(Product).where(Product.id == review_data.product_id)
+        )
         product_result = product.scalar_one_or_none()
 
         if product_result is None:
@@ -33,7 +35,7 @@ class ReviewService:
             product_id=review_data.product_id,
             user_id=review_data.user_id,
             rating=review_data.rating,
-            comment=review_data.comment
+            comment=review_data.comment,
         )
         self.db.add(db_review)
         await self.db.commit()
@@ -43,7 +45,7 @@ class ReviewService:
             select(Review)
             .options(
                 selectinload(Review.product).selectinload(Product.category),
-                selectinload(Review.user).selectinload(User.addresses)
+                selectinload(Review.user).selectinload(User.addresses),
             )
             .where(Review.id == db_review.id)
         )
@@ -56,7 +58,7 @@ class ReviewService:
     async def list_reviews(self, product_id: Optional[UUID] = None) -> List[Review]:
         stmt = select(Review).options(
             selectinload(Review.product).selectinload(Product.category),
-            selectinload(Review.user).selectinload(User.addresses)
+            selectinload(Review.user).selectinload(User.addresses),
         )
 
         if product_id:
@@ -64,7 +66,7 @@ class ReviewService:
 
         result = await self.db.execute(stmt)
         return result.scalars().all()
-    
+
     async def update_review(self, review_id: UUID, review_data: ReviewUpdate) -> Review:
         db_review = await self.review_repository.get_review_by_id(review_id)
         if not db_review:

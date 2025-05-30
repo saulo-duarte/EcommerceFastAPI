@@ -12,6 +12,7 @@ routers = [user.router, auth.router, category.router, product.router, review.rou
 for r in routers:
     app.include_router(r)
 
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}

@@ -7,7 +7,7 @@ from app.configs.logger import logger
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):
-    async  def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next):
         start_time = time.time()
 
         response = await call_next(request)
@@ -19,7 +19,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             path=request.url.path,
             status_code=response.status_code,
             duration=duration,
-            client_ip=request.client.host
+            client_ip=request.client.host,
         ).info("Request processed")
 
         return response

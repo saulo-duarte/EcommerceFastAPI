@@ -20,7 +20,9 @@ class ProductService:
             raise ValueError("Category not found")
 
         try:
-            new_product = await self.product_repository.create_product(product_data, category.id)
+            new_product = await self.product_repository.create_product(
+                product_data, category.id
+            )
             await self.db.commit()
             await self.db.refresh(new_product)
 
@@ -38,9 +40,14 @@ class ProductService:
 
     async def list_products(self) -> list[ProductRead]:
         products = await self.product_repository.list_products()
-        return [ProductRead.model_validate(product, from_attributes=True) for product in products]
+        return [
+            ProductRead.model_validate(product, from_attributes=True)
+            for product in products
+        ]
 
-    async def update_product(self, product_id: UUID, product_data: ProductUpdate) -> ProductRead:
+    async def update_product(
+        self, product_id: UUID, product_data: ProductUpdate
+    ) -> ProductRead:
         product = await self.product_repository.get_by_id(product_id)
         if not product:
             raise ValueError("Product not found")

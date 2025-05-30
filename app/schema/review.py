@@ -4,9 +4,6 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.schema.product import ProductRead
-from app.schema.user import UserRead
-
 MIN_RATING = 1.0
 MAX_RATING = 5.0
 MAX_COMMENT_LENGTH = 1000
@@ -30,9 +27,11 @@ class ReviewBase(BaseModel):
             raise ValueError(f"Comment must be at most {MAX_COMMENT_LENGTH} characters")
         return value
 
+
 class ReviewCreate(ReviewBase):
     product_id: UUID
     user_id: UUID
+
 
 class ReviewUpdate(BaseModel):
     rating: Optional[float] = Field(None, ge=MIN_RATING, le=MAX_RATING)
@@ -51,6 +50,7 @@ class ReviewUpdate(BaseModel):
         if value and len(value) > MAX_COMMENT_LENGTH:
             raise ValueError(f"Comment must be at most {MAX_COMMENT_LENGTH} characters")
         return value
+
 
 class ReviewRead(BaseModel):
     id: UUID

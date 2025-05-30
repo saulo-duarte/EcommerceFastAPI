@@ -18,7 +18,7 @@ class ReviewRepository:
             product_id=review_data.product_id,
             user_id=review_data.user_id,
             rating=review_data.rating,
-            comment=review_data.comment
+            comment=review_data.comment,
         )
         self.db.add(db_review)
         await self.db.commit()

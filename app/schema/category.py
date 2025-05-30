@@ -19,8 +19,10 @@ class CategoryBase(BaseModel):
             raise ValueError("Field cannot be empty or whitespace only.")
         return v
 
+
 class CategoryCreate(CategoryBase):
     pass
+
 
 class CategoryUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=255)
@@ -35,6 +37,7 @@ class CategoryUpdate(BaseModel):
         if not v:
             raise ValueError("Field cannot be empty or whitespace only.")
         return v
+
 
 class CategoryRead(CategoryBase):
     id: uuid.UUID

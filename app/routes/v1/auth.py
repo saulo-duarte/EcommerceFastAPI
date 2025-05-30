@@ -9,10 +9,11 @@ from app.security.security import create_access_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+
 @router.post("/login", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    db: AsyncSession = Depends(get_async_db)
+    db: AsyncSession = Depends(get_async_db),
 ):
     repo = UserRepository(db)
     user = await repo.get_by_email(form_data.username)

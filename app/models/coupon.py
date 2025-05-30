@@ -21,7 +21,9 @@ class CouponType(str, PyEnum):
     PERCENTAGE = "percentage"
     FIXED_AMOUNT = "fixed_amount"
 
+
 MAX_DISCOUNT_PERCENTAGE = 100
+
 
 @mapper_registry.mapped
 class Coupon:

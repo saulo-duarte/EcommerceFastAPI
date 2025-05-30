@@ -23,6 +23,7 @@ class OrderStatus(str, PyEnum):
     DELIVERED = "delivered"
     CANCELED = "canceled"
 
+
 @mapper_registry.mapped
 class Order:
     __tablename__ = "orders"

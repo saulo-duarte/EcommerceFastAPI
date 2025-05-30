@@ -10,9 +10,13 @@ class Password(BaseModel):
     @field_validator("raw")
     @classmethod
     def validate_password(cls, v: str) -> str:
-        pattern = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$")
+        pattern = re.compile(
+            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$"
+        )
         if not pattern.match(v):
-            raise ValueError("Password must be at least 8 characters and include uppercase, lowercase, digit, and special char.")
+            raise ValueError(
+                "Password must be at least 8 characters and include uppercase, lowercase, digit, and special char."
+            )
         return v
 
     def hash(self) -> str:

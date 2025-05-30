@@ -7,38 +7,26 @@ from app.schema.category import CategoryCreate, CategoryRead, CategoryUpdate
 
 
 def test_category_create_valid():
-    data = {
-        "name": " Electronics ",
-        "description": " Devices and gadgets "
-    }
+    data = {"name": " Electronics ", "description": " Devices and gadgets "}
     category = CategoryCreate(**data)
     assert category.name == "Electronics"
     assert category.description == "Devices and gadgets"
 
 
 def test_category_create_invalid_empty_name():
-    data = {
-        "name": "   ",
-        "description": "Some description"
-    }
+    data = {"name": "   ", "description": "Some description"}
     with pytest.raises(ValueError, match="Field cannot be empty or whitespace only."):
         CategoryCreate(**data)
 
 
 def test_category_create_invalid_empty_description():
-    data = {
-        "name": "Books",
-        "description": "  "
-    }
+    data = {"name": "Books", "description": "  "}
     with pytest.raises(ValueError, match="Field cannot be empty or whitespace only."):
         CategoryCreate(**data)
 
 
 def test_category_update_valid():
-    data = {
-        "name": " Updated Name ",
-        "description": " Updated Description "
-    }
+    data = {"name": " Updated Name ", "description": " Updated Description "}
     update = CategoryUpdate(**data)
     assert update.name == "Updated Name"
     assert update.description == "Updated Description"
@@ -68,7 +56,7 @@ def test_category_read_model():
         name="Books",
         description="All kinds of books",
         created_at=datetime.now(timezone.utc),
-        updated_at=datetime.now(timezone.utc)
+        updated_at=datetime.now(timezone.utc),
     )
     assert category.name == "Books"
     assert isinstance(category.created_at, datetime)

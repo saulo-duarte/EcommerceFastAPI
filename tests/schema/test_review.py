@@ -44,7 +44,6 @@ def test_review_create_invalid_rating_high():
     assert "less than or equal" in str(exc_info.value)
 
 
-
 def test_review_create_comment_too_long():
     data = {
         "rating": 4.0,
@@ -56,6 +55,7 @@ def test_review_create_comment_too_long():
         ReviewCreate(**data)
     assert "1000" in str(exc_info.value)
 
+
 def test_review_update_partial_valid():
     update = ReviewUpdate(rating=3.5, comment="Bom")
     assert update.rating == 3.5
@@ -66,7 +66,6 @@ def test_review_update_invalid_rating():
     with pytest.raises(ValueError) as exc_info:
         ReviewUpdate(rating=10)
     assert "less than or equal" in str(exc_info.value)
-
 
 
 def test_review_read_model():

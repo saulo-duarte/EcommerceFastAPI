@@ -27,8 +27,10 @@ class OrderItemBase(BaseModel):
             raise ValueError("Price snapshot must be non-negative")
         return value
 
+
 class OrderItemCreate(OrderItemBase):
     pass
+
 
 class OrderItemUpdate(BaseModel):
     quantity: Optional[int] = Field(None, ge=1)
@@ -48,6 +50,7 @@ class OrderItemUpdate(BaseModel):
             raise ValueError("Price snapshot must be non-negative")
         return value
 
+
 class OrderItemRead(BaseModel):
     id: UUID
     order_id: UUID
@@ -56,4 +59,3 @@ class OrderItemRead(BaseModel):
     price_snapshot: Decimal
 
     model_config = ConfigDict(from_attributes=True, strict=True)
-

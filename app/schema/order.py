@@ -14,6 +14,7 @@ from app.schema.user import UserRead
 if TYPE_CHECKING:
     from app.schema.shipment import ShipmentRead
 
+
 class OrderBase(BaseModel):
     user_id: UUID
     shipping_address_id: UUID
@@ -21,14 +22,17 @@ class OrderBase(BaseModel):
     status: OrderStatus = OrderStatus.PENDING
     total_price: Decimal = Field(..., ge=0)
 
+
 class OrderCreate(OrderBase):
     pass
+
 
 class OrderUpdate(BaseModel):
     status: Optional[OrderStatus] = None
     shipping_address_id: Optional[UUID] = None
     billing_address_id: Optional[UUID] = None
     total_price: Optional[Decimal] = Field(None, ge=0)
+
 
 class OrderRead(BaseModel):
     id: UUID

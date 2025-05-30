@@ -13,7 +13,9 @@ class ProductRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def create_product(self, product_data: ProductCreate, category_id: UUID) -> Product:
+    async def create_product(
+        self, product_data: ProductCreate, category_id: UUID
+    ) -> Product:
         db_product = Product(
             name=product_data.name,
             description=product_data.description,

@@ -9,6 +9,7 @@ from tests.models_factory import PaymentFactory, set_factories_session
 
 AMOUNT_IN_CENTS = 10000
 
+
 def test_payment_creation(session):
     set_factories_session(session)
 

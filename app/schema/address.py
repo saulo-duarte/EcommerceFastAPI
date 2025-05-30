@@ -20,13 +20,14 @@ class AddressBase(BaseModel):
         v = v.strip()
         if not v.replace("-", "").isalnum():
             raise ValueError(
-                "Postal code must contain only letters, "
-                "numbers, or dashes."
+                "Postal code must contain only letters, " "numbers, or dashes."
             )
         return v.upper()
 
+
 class AddressCreate(AddressBase):
     pass
+
 
 class AddressUpdate(BaseModel):
     street: Optional[str] = Field(None, min_length=1, max_length=255)
@@ -44,8 +45,7 @@ class AddressUpdate(BaseModel):
             v = v.strip()
             if not v.replace("-", "").isalnum():
                 raise ValueError(
-                    "Postal code must contain only letters, "
-                    "numbers, or dashes."
+                    "Postal code must contain only letters, " "numbers, or dashes."
                 )
             return v.upper()
         return v
@@ -54,6 +54,7 @@ class AddressUpdate(BaseModel):
     @classmethod
     def strip_whitespace(cls, v: Optional[str]) -> Optional[str]:
         return v.strip() if v else v
+
 
 class AddressRead(AddressBase):
     id: uuid.UUID

@@ -14,11 +14,14 @@ class CartItemBase(BaseModel):
     quantity: int = Field(..., ge=1)
     price_snapshot: Decimal = Field(..., ge=0)
 
+
 class CartItemCreate(CartItemBase):
     pass
 
+
 class CartItemUpdate(BaseModel):
     quantity: Optional[int] = Field(None, ge=1)
+
 
 class CartItemRead(BaseModel):
     id: uuid.UUID

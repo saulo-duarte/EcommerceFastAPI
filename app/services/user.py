@@ -27,7 +27,11 @@ class UserService:
             await self.db.refresh(new_user)
             await self.db.commit()
 
-            stmt = select(User).options(selectinload(User.addresses)).where(User.id == new_user.id)
+            stmt = (
+                select(User)
+                .options(selectinload(User.addresses))
+                .where(User.id == new_user.id)
+            )
             result = await self.db.execute(stmt)
             user_with_addresses = result.scalar_one()
 
@@ -42,7 +46,6 @@ class UserService:
         result = await self.db.execute(stmt)
         users = result.scalars().all()
         return [UserRead.model_validate(user) for user in users]
-
 
     async def get_user_by_id(self, user_id: int) -> User:
         user = await self.user_repository.get_by_id(user_id)

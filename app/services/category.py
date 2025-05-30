@@ -33,14 +33,21 @@ class CategoryService:
 
     async def list_categories(self) -> List[CategoryRead]:
         categories = await self.category_repository.list_categories()
-        return [CategoryRead.model_validate(category, from_attributes=True) for category in categories]
+        return [
+            CategoryRead.model_validate(category, from_attributes=True)
+            for category in categories
+        ]
 
-    async def update_category(self, category_id: UUID, category_data: CategoryUpdate) -> CategoryRead:
+    async def update_category(
+        self, category_id: UUID, category_data: CategoryUpdate
+    ) -> CategoryRead:
         category = await self.category_repository.get_by_id(category_id)
         if not category:
             raise ValueError("Category not found")
 
-        updated_category = await self.category_repository.update(category, category_data)
+        updated_category = await self.category_repository.update(
+            category, category_data
+        )
         return CategoryRead.model_validate(updated_category, from_attributes=True)
 
     async def delete_category(self, category_id: UUID) -> None:

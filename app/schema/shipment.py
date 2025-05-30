@@ -41,6 +41,7 @@ class ShipmentUpdate(BaseModel):
             raise ValueError("Tracking number cannot be empty")
         return value
 
+
 class ShipmentRead(BaseModel):
     id: UUID
     order_id: UUID

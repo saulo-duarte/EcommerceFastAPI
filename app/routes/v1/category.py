@@ -7,6 +7,7 @@ from app.services.category import CategoryService
 
 router = APIRouter(prefix="/category", tags=["category"])
 
+
 @router.post("/", response_model=CategoryRead)
 async def create_category(
     category_data: CategoryCreate,
@@ -19,11 +20,13 @@ async def create_category(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/", response_model=list[CategoryRead])
 async def list_categories(db: AsyncSession = Depends(get_async_db)):
     category_service = CategoryService(db)
     categories = await category_service.list_categories()
     return categories
+
 
 @router.get("/{category_id}", response_model=CategoryRead)
 async def get_category(
@@ -37,6 +40,7 @@ async def get_category(
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.put("/{category_id}", response_model=CategoryRead)
 async def update_category(
     category_id: str,
@@ -45,10 +49,13 @@ async def update_category(
 ):
     try:
         category_service = CategoryService(db)
-        updated_category = await category_service.update_category(category_id, category_data)
+        updated_category = await category_service.update_category(
+            category_id, category_data
+        )
         return updated_category
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
 
 @router.delete("/{category_id}")
 async def delete_category(

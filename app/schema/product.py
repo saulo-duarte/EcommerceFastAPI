@@ -8,6 +8,7 @@ from app.schema.category import CategoryRead
 
 MIN_DESCRIPTION_LENGTH = 2
 
+
 class ProductBase(BaseModel):
     name: str = Field(..., min_length=2, max_length=255)
     description: Optional[str] = Field(None, max_length=255)
@@ -25,8 +26,7 @@ class ProductBase(BaseModel):
     def validate_description(cls, value: Optional[str]) -> Optional[str]:
         if value and len(value.strip()) < MIN_DESCRIPTION_LENGTH:
             raise ValueError(
-                f"Description must be at least {MIN_DESCRIPTION_LENGTH} "
-                "characters"
+                f"Description must be at least {MIN_DESCRIPTION_LENGTH} " "characters"
             )
         return value.strip() if value else value
 
@@ -53,10 +53,10 @@ class ProductUpdate(BaseModel):
     def validate_description(cls, value: Optional[str]) -> Optional[str]:
         if value and len(value.strip()) < MIN_DESCRIPTION_LENGTH:
             raise ValueError(
-                f"Description must be at least {MIN_DESCRIPTION_LENGTH} "
-                "characters"
+                f"Description must be at least {MIN_DESCRIPTION_LENGTH} " "characters"
             )
         return value.strip() if value else value
+
 
 class ProductRead(ProductBase):
     id: uuid.UUID
