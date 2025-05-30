@@ -61,7 +61,4 @@ class ReviewRead(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    product: Optional[ProductRead]
-    user: Optional[UserRead]
-
     model_config = ConfigDict(from_attributes=True, strict=True)
