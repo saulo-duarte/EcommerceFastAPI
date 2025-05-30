@@ -1,13 +1,27 @@
 from fastapi import FastAPI
 
 from app.configs.logging_middleware import LoggingMiddleware
-from app.routes.v1 import auth, category, product, review, user
+from app.routes.v1 import (
+    auth, 
+    category, 
+    product, 
+    review, 
+    user,
+    cart
+)
 
 app = FastAPI()
 
 app.add_middleware(LoggingMiddleware)
 
-routers = [user.router, auth.router, category.router, product.router, review.router]
+routers = [
+    user.router, 
+    auth.router, 
+    category.router, 
+    product.router, 
+    review.router, 
+    cart.router
+]
 
 for r in routers:
     app.include_router(r)
